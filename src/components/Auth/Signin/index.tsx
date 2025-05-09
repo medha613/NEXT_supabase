@@ -2,10 +2,11 @@
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@/lib/supabase/client";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email format").nonempty("Email is required"),
@@ -31,13 +32,29 @@ const Signin = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async(data) => {
+    console.log(data); 
     localStorage.setItem("user", JSON.stringify(data));
+
+    
+    
     // router.push("/dashboard");
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      debugger;
+      const supabase = createClient();
+      const RES = await supabase.auth.signInWithPassword({
+        email: "test@mailinator.com",
+        password: "test1@123",
+      });
+      console.log(RES, "response from onsubmitt");
+    };
 
+    fetchUser();
+  }, []);
+  
 
   return (
     <>

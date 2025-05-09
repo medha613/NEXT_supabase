@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { createServerClient } from '@supabase/ssr';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -16,7 +17,8 @@ const isProtectedRoute = (pathname: string) => {
 
 // rolee based authentication
 
-export default function middleware(request: NextRequest) {
+export default async function  middleware(request: NextRequest) {
+    const response = NextResponse.next();
     const { pathname } = request.nextUrl;
 
     // First, run the internationalization middleware
@@ -25,6 +27,31 @@ export default function middleware(request: NextRequest) {
         return intlResponse;
     }
 
+
+    // CREATE SUPABASE CLEINT WITH SSR
+    const supabase = createServerClient(
+        process.env.NEXT_SUPABASE_PROJECT_URL,
+        process.env.NEXT_SUPABASE_ANON_KEY,
+        {
+            cookies: {
+                get(name) {
+                    return request.cookies.get(name)?.value;
+                },
+                set(name, value, options) {
+                    response.cookies.set(name, value, options);
+                },
+                remove(name, options) {
+                    response.cookies.set(name, '', { ...options, maxAge: -1 });
+                },
+            },
+        }
+
+    )
+    const {
+        data: { session },
+    } = await supabase.auth.getSession();
+
+    
     // better store the token in the cookies, as such middleware is the server side, not client side.
     // so middleware cannot acces local storage
     const token = request.cookies.get('token')?.value;
@@ -35,7 +62,7 @@ export default function middleware(request: NextRequest) {
     }
 
     // Proceed with the internationalization response (or other logic if needed)
-    return intlResponse;
+    return response;
 }
 
 export const config = {
