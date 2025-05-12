@@ -8,14 +8,9 @@ const intlMiddleware = createMiddleware(routing);
 const protectedPaths = ['/cart', '/checkout', '/contact', '/shop-with-sidebar'];
 
 const isProtectedRoute = (pathname: string) => {
-    const locale = pathname.split('/')[1];
-    const actualPath = '/' + pathname.split("/").slice(2).join('/'); // Skip the locale
-
+    const actualPath = '/' + pathname.split("/").slice(2).join('/'); 
     return protectedPaths.some((path) => actualPath.startsWith(path));
 };
-
-
-// rolee based authentication
 
 export default async function  middleware(request: NextRequest) {
     const response = NextResponse.next();
@@ -30,8 +25,8 @@ export default async function  middleware(request: NextRequest) {
 
     // CREATE SUPABASE CLEINT WITH SSR
     const supabase = createServerClient(
-        process.env.NEXT_SUPABASE_PROJECT_URL,
-        process.env.NEXT_SUPABASE_ANON_KEY,
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         {
             cookies: {
                 get(name) {
@@ -51,21 +46,15 @@ export default async function  middleware(request: NextRequest) {
         data: { session },
     } = await supabase.auth.getSession();
 
-    
-    // better store the token in the cookies, as such middleware is the server side, not client side.
-    // so middleware cannot acces local storage
     const token = request.cookies.get('token')?.value;
     if (isProtectedRoute(pathname) && !token) {
-        // If protected and no token, redirect to login
         const loginUrl = new URL('/signin', request.url);
         return NextResponse.redirect(loginUrl);
     }
 
-    // Proceed with the internationalization response (or other logic if needed)
     return response;
 }
 
 export const config = {
-    // Match all paths except for specific exclusions
     matcher: '/((?!api|_next|_vercel|.*\\..*).*)',
 };

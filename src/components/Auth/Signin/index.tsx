@@ -22,6 +22,8 @@ const loginSchema = z.object({
 export type loginType = z.infer<typeof loginSchema>;
 
 
+// SHOWWW ERROR MESSAGES
+
 const Signin = () => {
 
   const {
@@ -32,29 +34,24 @@ const Signin = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async(data) => {
-    console.log(data); 
+  const onSubmit = async (data) => {
+    console.log(data);
     localStorage.setItem("user", JSON.stringify(data));
+    const supabase = createClient();
+    const { data: response, error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
 
-    
-    
-    // router.push("/dashboard");
+    if (error) {
+      console.error("Sign-in error", error.message);
+    } else {
+      console.log("Sign-in successfull", response)
+    }
+
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      debugger;
-      const supabase = createClient();
-      const RES = await supabase.auth.signInWithPassword({
-        email: "test@mailinator.com",
-        password: "test1@123",
-      });
-      console.log(RES, "response from onsubmitt");
-    };
 
-    fetchUser();
-  }, []);
-  
 
   return (
     <>

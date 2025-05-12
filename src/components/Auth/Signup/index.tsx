@@ -1,12 +1,62 @@
 'use client'
 import Breadcrumb from "@/components/Common/Breadcrumb";
+import { createClient } from "@/lib/supabase/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form"
+import {z} from "zod"
+
+
+
+const signUpSchema  = z.object({
+  fullName: z.string().nonempty("Please Enter your full name"),
+  email: z.string().email("Invalid Email format").nonempty("Please enter your email"),
+  password: z
+  .string()
+  .min(6, "The password must be atleast 6 characters long")
+  .max(20, "Password must be at max 20 characters long")
+    .regex(
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{6,20}$/,
+      "Password should contain at least 6 characters, one capital letter, one special character, and one number"
+    )
+    .nonempty("Please enter your password"),
+  reTypePassword: z.string()
+})
+.refine((data) => data.password === data.reTypePassword, {
+  message: "Passwords do not match",
+  path: ["reTypePassword"]
+})
+
+export type SignUpType = z.infer<typeof signUpSchema>
+
 const Signup = () => {
 
-  const {register} = useForm() 
-  
+  const {
+    register, 
+    handleSubmit,
+    formState: {errors}
+  } = useForm<SignUpType>({
+    resolver: zodResolver(signUpSchema)
+  }) 
+
+const onSubmit = async (data) => {
+    console.log(data);
+    localStorage.setItem("user", JSON.stringify(data));
+    const supabase = createClient();
+  const { data: response, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (error) {
+      console.error("Sign-in error", error.message);
+    } else {
+      console.log("Sign-in successfull", response)
+    }
+
+  };
+
 
   return (
     <>
@@ -26,7 +76,7 @@ const Signup = () => {
                 <svg
                   width="20"
                   height="20"
-                  viewBox="0 0 20 20"
+                  viewBox="03-4-5 6-7 0 20 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -92,7 +142,7 @@ const Signup = () => {
             </span>
 
             <div className="mt-5.5">
-              <form>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-5">
                   <label htmlFor="name" className="block mb-2.5">
                     Full Name <span className="text-red">*</span>
@@ -100,10 +150,9 @@ const Signup = () => {
 
                   <input
                     type="text"
-                    name="name"
-                    id="name"
                     placeholder="Enter your full name"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    {...register("fullName")}
                   />
                 </div>
 
@@ -114,10 +163,9 @@ const Signup = () => {
 
                   <input
                     type="email"
-                    name="email"
-                    id="email"
                     placeholder="Enter your email address"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    {...register("email")}
                   />
                 </div>
 
@@ -128,11 +176,10 @@ const Signup = () => {
 
                   <input
                     type="password"
-                    name="password"
-                    id="password"
                     placeholder="Enter your password"
                     autoComplete="on"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    {...register("password")}
                   />
                 </div>
 
@@ -143,11 +190,11 @@ const Signup = () => {
 
                   <input
                     type="password"
-                    name="re-type-password"
-                    id="re-type-password"
                     placeholder="Re-type your password"
                     autoComplete="on"
                     className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    {...register("reTypePassword")}
+
                   />
                 </div>
 

@@ -27,14 +27,16 @@ const Home = async () => {
 
   const { data: { session }, error } = await supabase.auth.getSession();
 
-  console.log(RES, "RESSPONSEEE");  // Log the sign-in response
-  console.log(session, "SESSIONNN");  // Log the session (should not be null if successful)
+  console.log(RES, "RESSPONSEEE"); 
+  console.log(session, "SESSIONNN");
 
   if (error) {
     console.error("Session error:", error.message);
   } else {
     console.log("User session:", session);
   }
+
+  
   return (
     <main>
       <Hero />
