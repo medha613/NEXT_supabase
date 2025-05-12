@@ -32,7 +32,6 @@ export default function LangSwitcher() {
         const newPath = getNewPathWithLocale(newLocale);
 
         startTransition(() => {
-            console.log(newPath);
             router.replace(newPath);
         });
     };

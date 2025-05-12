@@ -86,12 +86,11 @@ const ShopDetails = () => {
     localStorage.setItem("productDetails", JSON.stringify(product));
   }, [product]);
 
-  // pass the product here when you get the real data.
+
   const handlePreviewSlider = () => {
     openPreviewModal();
   };
 
-  console.log(product, "PRODUCT");
 
   return (
     <>
@@ -144,11 +143,10 @@ const ShopDetails = () => {
                       <button
                         onClick={() => setPreviewImg(key)}
                         key={key}
-                        className={`flex items-center justify-center w-15 sm:w-25 h-15 sm:h-25 overflow-hidden rounded-lg bg-gray-2 shadow-1 ease-out duration-200 border-2 hover:border-blue ${
-                          key === previewImg
-                            ? "border-blue"
-                            : "border-transparent"
-                        }`}
+                        className={`flex items-center justify-center w-15 sm:w-25 h-15 sm:h-25 overflow-hidden rounded-lg bg-gray-2 shadow-1 ease-out duration-200 border-2 hover:border-blue ${key === previewImg
+                          ? "border-blue"
+                          : "border-transparent"
+                          }`}
                       >
                         <Image
                           width={50}
@@ -395,9 +393,8 @@ const ShopDetails = () => {
                                   onChange={() => setActiveColor(color)}
                                 />
                                 <div
-                                  className={`flex items-center justify-center w-5.5 h-5.5 rounded-full ${
-                                    activeColor === color && "border"
-                                  }`}
+                                  className={`flex items-center justify-center w-5.5 h-5.5 rounded-full ${activeColor === color && "border"
+                                    }`}
                                   style={{ borderColor: `${color}` }}
                                 >
                                   <span
@@ -435,11 +432,10 @@ const ShopDetails = () => {
 
                                 {/*  */}
                                 <div
-                                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded border ${
-                                    storage === item.id
-                                      ? "border-blue bg-blue"
-                                      : "border-gray-4"
-                                  } `}
+                                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded border ${storage === item.id
+                                    ? "border-blue bg-blue"
+                                    : "border-gray-4"
+                                    } `}
                                 >
                                   <span
                                     className={
@@ -503,11 +499,10 @@ const ShopDetails = () => {
 
                                 {/*  */}
                                 <div
-                                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded border ${
-                                    type === item.id
-                                      ? "border-blue bg-blue"
-                                      : "border-gray-4"
-                                  } `}
+                                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded border ${type === item.id
+                                    ? "border-blue bg-blue"
+                                    : "border-gray-4"
+                                    } `}
                                 >
                                   <span
                                     className={
@@ -571,11 +566,10 @@ const ShopDetails = () => {
 
                                 {/*  */}
                                 <div
-                                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded border ${
-                                    sim === item.id
-                                      ? "border-blue bg-blue"
-                                      : "border-gray-4"
-                                  } `}
+                                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded border ${sim === item.id
+                                    ? "border-blue bg-blue"
+                                    : "border-gray-4"
+                                    } `}
                                 >
                                   <span
                                     className={
@@ -711,11 +705,10 @@ const ShopDetails = () => {
                   <button
                     key={key}
                     onClick={() => setActiveTab(item.id)}
-                    className={`font-medium lg:text-lg ease-out duration-200 hover:text-blue relative before:h-0.5 before:bg-blue before:absolute before:left-0 before:bottom-0 before:ease-out before:duration-200 hover:before:w-full ${
-                      activeTab === item.id
-                        ? "text-blue before:w-full"
-                        : "text-dark before:w-0"
-                    }`}
+                    className={`font-medium lg:text-lg ease-out duration-200 hover:text-blue relative before:h-0.5 before:bg-blue before:absolute before:left-0 before:bottom-0 before:ease-out before:duration-200 hover:before:w-full ${activeTab === item.id
+                      ? "text-blue before:w-full"
+                      : "text-dark before:w-0"
+                      }`}
                   >
                     {item.title}
                   </button>
@@ -727,9 +720,8 @@ const ShopDetails = () => {
               {/* <!-- tab content one start --> */}
               <div>
                 <div
-                  className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${
-                    activeTab === "tabOne" ? "flex" : "hidden"
-                  }`}
+                  className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabOne" ? "flex" : "hidden"
+                    }`}
                 >
                   <div className="max-w-[670px] w-full">
                     <h2 className="font-medium text-2xl text-dark mb-7">
@@ -780,9 +772,8 @@ const ShopDetails = () => {
               {/* <!-- tab content two start --> */}
               <div>
                 <div
-                  className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10 ${
-                    activeTab === "tabTwo" ? "block" : "hidden"
-                  }`}
+                  className={`rounded-xl bg-white shadow-1 p-4 sm:p-6 mt-10 ${activeTab === "tabTwo" ? "block" : "hidden"
+                    }`}
                 >
                   {/* <!-- info item --> */}
                   <div className="rounded-md even:bg-gray-1 flex py-4 px-4 sm:px-5">
@@ -923,9 +914,8 @@ const ShopDetails = () => {
               {/* <!-- tab content three start --> */}
               <div>
                 <div
-                  className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${
-                    activeTab === "tabThree" ? "flex" : "hidden"
-                  }`}
+                  className={`flex-col sm:flex-row gap-7.5 xl:gap-12.5 mt-12.5 ${activeTab === "tabThree" ? "flex" : "hidden"
+                    }`}
                 >
                   <div className="max-w-[570px] w-full">
                     <h2 className="font-medium text-2xl text-dark mb-9">

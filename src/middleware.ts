@@ -5,16 +5,8 @@ import { createServerClient } from '@supabase/ssr';
 
 const intlMiddleware = createMiddleware(routing);
 
-const protectedPaths = ['/cart', '/checkout', '/contact', '/shop-with-sidebar'];
-
-const isProtectedRoute = (pathname: string) => {
-    const actualPath = '/' + pathname.split("/").slice(2).join('/'); 
-    return protectedPaths.some((path) => actualPath.startsWith(path));
-};
-
-export default async function  middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
     const response = NextResponse.next();
-    const { pathname } = request.nextUrl;
 
     // First, run the internationalization middleware
     const intlResponse = intlMiddleware(request);
@@ -42,14 +34,12 @@ export default async function  middleware(request: NextRequest) {
         }
 
     )
-    const {
-        data: { session },
-    } = await supabase.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
 
-    const token = request.cookies.get('token')?.value;
-    if (isProtectedRoute(pathname) && !token) {
-        const loginUrl = new URL('/signin', request.url);
-        return NextResponse.redirect(loginUrl);
+    console.log( "SESSIONS STARTT========",session, "=======SESSIONNS ENDD")
+
+    if (!session) {
+        return NextResponse.redirect(new URL('/signin', request.url));
     }
 
     return response;

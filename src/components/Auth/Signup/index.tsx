@@ -3,6 +3,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { createClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form"
 import {z} from "zod"
@@ -40,8 +41,9 @@ const Signup = () => {
     resolver: zodResolver(signUpSchema)
   }) 
 
+  const router = useRouter()
 const onSubmit = async (data) => {
-    console.log(data);
+
     localStorage.setItem("user", JSON.stringify(data));
     const supabase = createClient();
   const { data: response, error } = await supabase.auth.signUp({
@@ -52,8 +54,11 @@ const onSubmit = async (data) => {
     if (error) {
       console.error("Sign-in error", error.message);
     } else {
-      console.log("Sign-in successfull", response)
+      console.log(response, "RESPONSE FROM SIGNUP PAGE")
+      router.push("/signIn")
     }
+
+    
 
   };
 
@@ -76,7 +81,7 @@ const onSubmit = async (data) => {
                 <svg
                   width="20"
                   height="20"
-                  viewBox="03-4-5 6-7 0 20 20"
+                  viewBox="04-5 6-7 0 20 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >

@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email format").nonempty("Email is required"),
@@ -34,6 +36,7 @@ const Signin = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  const router = useRouter()
   const onSubmit = async (data) => {
     console.log(data);
     localStorage.setItem("user", JSON.stringify(data));
@@ -46,9 +49,12 @@ const Signin = () => {
     if (error) {
       console.error("Sign-in error", error.message);
     } else {
-      console.log("Sign-in successfull", response)
+      localStorage.setItem("token", response.session.access_token)
+      router.push("/")
     }
 
+
+    
   };
 
 
