@@ -36,12 +36,9 @@ export default async function middleware(request: NextRequest) {
     )
     const { data: { session } } = await supabase.auth.getSession();
 
-    console.log( "SESSIONS STARTT========",session, "=======SESSIONNS ENDD")
-
     if (!session) {
         return NextResponse.redirect(new URL('/signin', request.url));
     }
-
     return response;
 }
 

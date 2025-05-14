@@ -21,6 +21,7 @@ const loginSchema = z.object({
       "Password should contain at least 6 characters, one capital letter, one special character, and one number"
     ).nonempty("Password is required"),
 });
+
 export type loginType = z.infer<typeof loginSchema>;
 
 
@@ -37,8 +38,9 @@ const Signin = () => {
   });
 
   const router = useRouter()
+
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(data, "DATAA");
     localStorage.setItem("user", JSON.stringify(data));
     const supabase = createClient();
     const { data: response, error } = await supabase.auth.signInWithPassword({
@@ -50,11 +52,9 @@ const Signin = () => {
       console.error("Sign-in error", error.message);
     } else {
       localStorage.setItem("token", response.session.access_token)
+      //17-13
       router.push("/")
-    }
-
-
-    
+    }   
   };
 
 

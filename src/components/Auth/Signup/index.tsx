@@ -56,9 +56,8 @@ const onSubmit = async (data) => {
     } else {
       console.log(response, "RESPONSE FROM SIGNUP PAGE")
       router.push("/signIn")
+      
     }
-
-    
 
   };
 
@@ -81,7 +80,7 @@ const onSubmit = async (data) => {
                 <svg
                   width="20"
                   height="20"
-                  viewBox="04-5 6-7 0 20 20"
+                  viewBox="06-7 0 20 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
